@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AdoNet_EfCore.Data;
-using AdoNet_EfCore.Models.Csv;
+using AnalisisDeVentas.Data;
+using AnalisisDeVentas.Models.Csv;
 using Microsoft.Data.SqlClient;
 
-namespace AdoNet_EfCore.Staging;
+namespace AnalisisDeVentas.Staging;
 
 
 

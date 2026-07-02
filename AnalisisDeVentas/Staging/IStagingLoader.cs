@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AdoNet_EfCore.Models.Csv;
+using AnalisisDeVentas.Models.Csv;
 
-namespace AdoNet_EfCore.Staging;
+namespace AnalisisDeVentas.Staging;
 
 
 

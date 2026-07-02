@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace AdoNet_EfCore.Extraction;
+namespace AnalisisDeVentas.Extraction;
 
 
 

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using CsvHelper;
 using CsvHelper.Configuration;
 
-namespace AdoNet_EfCore.Extraction;
+namespace AnalisisDeVentas.Extraction;
 
 
 

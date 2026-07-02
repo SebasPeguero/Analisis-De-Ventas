@@ -1,8 +1,8 @@
-using AdoNet_EfCore.Models.Entities.Sales;
+using AnalisisDeVentas.Models.Entities.Sales;
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AdoNet_EfCore.Models.Entities.Master;
+namespace AnalisisDeVentas.Models.Entities.Master;
 
 public partial class OrderStatus
 {

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
-using AdoNet_EfCore.Models.Entities.Master;
-using AdoNet_EfCore.Models.Entities.Sales;
+using AnalisisDeVentas.Models.Entities.Master;
+using AnalisisDeVentas.Models.Entities.Sales;
 using Microsoft.EntityFrameworkCore;
 
-namespace AdoNet_EfCore.Data;
+namespace AnalisisDeVentas.Data;
 
 public partial class SistemaAnalisisVentasContext : DbContext
 {

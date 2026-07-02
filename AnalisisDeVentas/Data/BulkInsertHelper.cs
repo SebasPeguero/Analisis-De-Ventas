@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 
-namespace AdoNet_EfCore.Data;
+namespace AnalisisDeVentas.Data;
 
 
 

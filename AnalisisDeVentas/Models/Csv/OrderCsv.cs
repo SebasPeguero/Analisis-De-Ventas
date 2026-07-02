@@ -1,7 +1,7 @@
 using System;
 using CsvHelper.Configuration.Attributes;
 
-namespace AdoNet_EfCore.Models.Csv;
+namespace AnalisisDeVentas.Models.Csv;
 
 public class OrderCsv
 {
