@@ -21,7 +21,13 @@ public class DimensionBuilder : IDimensionBuilder
 
         using (var cmd = conn.CreateCommand())
         {
-            cmd.CommandText = "TRUNCATE TABLE Dim.Customer;";
+            cmd.CommandText = "TRUNCATE TABLE [Fact].Sales;";
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        using (var cmd = conn.CreateCommand())
+        {
+            cmd.CommandText = "DELETE FROM Dim.Customer; DBCC CHECKIDENT ('Dim.Customer', RESEED, 0);";
             await cmd.ExecuteNonQueryAsync();
 
             cmd.CommandText = @"
@@ -42,7 +48,7 @@ public class DimensionBuilder : IDimensionBuilder
 
         using (var cmd = conn.CreateCommand())
         {
-            cmd.CommandText = "TRUNCATE TABLE Dim.Product;";
+            cmd.CommandText = "DELETE FROM Dim.Product; DBCC CHECKIDENT ('Dim.Product', RESEED, 0);";
             await cmd.ExecuteNonQueryAsync();
 
             cmd.CommandText = @"
@@ -59,7 +65,7 @@ public class DimensionBuilder : IDimensionBuilder
 
         using (var cmd = conn.CreateCommand())
         {
-            cmd.CommandText = "TRUNCATE TABLE Dim.Status;";
+            cmd.CommandText = "DELETE FROM Dim.Status; DBCC CHECKIDENT ('Dim.Status', RESEED, 0);";
             await cmd.ExecuteNonQueryAsync();
 
             cmd.CommandText = @"
@@ -71,7 +77,7 @@ public class DimensionBuilder : IDimensionBuilder
 
         using (var cmd = conn.CreateCommand())
         {
-            cmd.CommandText = "TRUNCATE TABLE Dim.Date;";
+            cmd.CommandText = "DELETE FROM Dim.Date;";
             await cmd.ExecuteNonQueryAsync();
 
             cmd.CommandText = @"
@@ -116,8 +122,7 @@ public class DimensionBuilder : IDimensionBuilder
             INNER JOIN Dim.Customer dc ON mc.CustomerID = dc.CustomerID
             INNER JOIN Master.Products mp ON d.ProductID = mp.ProductID
             INNER JOIN Dim.Product dp ON mp.ProductID = dp.ProductID
-            INNER JOIN Dim.OrderStatus mos ON o.StatusID = mos.StatusID
-            INNER JOIN Dim.Status ds ON mos.StatusID = ds.StatusID;
+            INNER JOIN Dim.Status ds ON o.StatusID = ds.StatusID;
         ";
         await cmd.ExecuteNonQueryAsync();
     }
