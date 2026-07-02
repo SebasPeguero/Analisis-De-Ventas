@@ -22,11 +22,16 @@ public class ProductMasterLoader : IProductMasterLoader
     public async Task<TableSummary> LoadCategoriesAsync(IEnumerable<ProductCsv> products)
     {
         var summary = new TableSummary { TableName = "Master.Categories" };
-        var rawCategories = products
-            .Select(p => p.Category?.Trim())
-            .Where(c => !string.IsNullOrEmpty(c))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToList();
+        var rawCategories = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var p in products)
+        {
+            var cat = p.Category?.Trim();
+            if (!string.IsNullOrEmpty(cat))
+            {
+                rawCategories.Add(cat);
+            }
+        }
 
         summary.Processed = rawCategories.Count;
 
@@ -60,10 +65,16 @@ public class ProductMasterLoader : IProductMasterLoader
     public async Task<TableSummary> LoadProductsAsync(IEnumerable<ProductCsv> products)
     {
         var summary = new TableSummary { TableName = "Master.Products" };
-        var uniqueProducts = products
-            .GroupBy(p => p.ProductId)
-            .Select(g => g.First())
-            .ToList();
+        
+        var uniqueProducts = new List<ProductCsv>();
+        var seenIds = new HashSet<int>();
+        foreach (var p in products)
+        {
+            if (seenIds.Add(p.ProductId))
+            {
+                uniqueProducts.Add(p);
+            }
+        }
 
         summary.Processed = uniqueProducts.Count;
 

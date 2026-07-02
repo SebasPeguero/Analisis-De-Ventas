@@ -22,11 +22,16 @@ public class CustomerMasterLoader : ICustomerMasterLoader
     public async Task<TableSummary> LoadCountriesAsync(IEnumerable<CustomerCsv> customers)
     {
         var summary = new TableSummary { TableName = "Master.Countries" };
-        var rawCountries = customers
-            .Select(c => c.Country?.Trim())
-            .Where(c => !string.IsNullOrEmpty(c))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToList();
+        var rawCountries = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var c in customers)
+        {
+            var country = c.Country?.Trim();
+            if (!string.IsNullOrEmpty(country))
+            {
+                rawCountries.Add(country);
+            }
+        }
 
         summary.Processed = rawCountries.Count;
 
@@ -56,11 +61,17 @@ public class CustomerMasterLoader : ICustomerMasterLoader
     public async Task<TableSummary> LoadCitiesAsync(IEnumerable<CustomerCsv> customers)
     {
         var summary = new TableSummary { TableName = "Master.Cities" };
-        var rawCities = customers
-            .Where(c => !string.IsNullOrEmpty(c.City) && !string.IsNullOrEmpty(c.Country))
-            .Select(c => new { City = c.City.Trim(), Country = c.Country.Trim() })
-            .Distinct()
-            .ToList();
+        var rawCities = new HashSet<(string City, string Country)>();
+
+        foreach (var c in customers)
+        {
+            var city = c.City?.Trim();
+            var country = c.Country?.Trim();
+            if (!string.IsNullOrEmpty(city) && !string.IsNullOrEmpty(country))
+            {
+                rawCities.Add((city, country));
+            }
+        }
 
         summary.Processed = rawCities.Count;
 
@@ -100,10 +111,16 @@ public class CustomerMasterLoader : ICustomerMasterLoader
     public async Task<TableSummary> LoadCustomersAsync(IEnumerable<CustomerCsv> customers)
     {
         var summary = new TableSummary { TableName = "Master.Customers" };
-        var uniqueCustomers = customers
-            .GroupBy(c => c.CustomerId)
-            .Select(g => g.First())
-            .ToList();
+        
+        var uniqueCustomers = new List<CustomerCsv>();
+        var seenIds = new HashSet<int>();
+        foreach (var c in customers)
+        {
+            if (seenIds.Add(c.CustomerId))
+            {
+                uniqueCustomers.Add(c);
+            }
+        }
 
         summary.Processed = uniqueCustomers.Count;
 

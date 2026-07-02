@@ -23,11 +23,16 @@ public class OrderMasterLoader : IOrderMasterLoader
     public async Task<TableSummary> LoadOrderStatusAsync(IEnumerable<OrderCsv> orders)
     {
         var summary = new TableSummary { TableName = "Master.OrderStatus" };
-        var rawStatuses = orders
-            .Select(o => o.Status?.Trim())
-            .Where(s => !string.IsNullOrEmpty(s))
-            .Distinct(StringComparer.OrdinalIgnoreCase)
-            .ToList();
+        var rawStatuses = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var o in orders)
+        {
+            var status = o.Status?.Trim();
+            if (!string.IsNullOrEmpty(status))
+            {
+                rawStatuses.Add(status);
+            }
+        }
 
         summary.Processed = rawStatuses.Count;
 
@@ -57,10 +62,16 @@ public class OrderMasterLoader : IOrderMasterLoader
     public async Task<TableSummary> LoadOrdersAsync(IEnumerable<OrderCsv> orders)
     {
         var summary = new TableSummary { TableName = "Sales.Orders" };
-        var uniqueOrders = orders
-            .GroupBy(o => o.OrderId)
-            .Select(g => g.First())
-            .ToList();
+        
+        var uniqueOrders = new List<OrderCsv>();
+        var seenIds = new HashSet<int>();
+        foreach (var o in orders)
+        {
+            if (seenIds.Add(o.OrderId))
+            {
+                uniqueOrders.Add(o);
+            }
+        }
 
         summary.Processed = uniqueOrders.Count;
 
@@ -128,7 +139,9 @@ public class OrderMasterLoader : IOrderMasterLoader
     public async Task<TableSummary> LoadOrderDetailsAsync(IEnumerable<OrderDetailCsv> orderDetails)
     {
         var summary = new TableSummary { TableName = "Sales.OrderDetails" };
-        summary.Processed = orderDetails.Count();
+        
+        var listDetails = orderDetails.ToList();
+        summary.Processed = listDetails.Count;
 
         var orders = await _context.Orders
             .ToDictionaryAsync(o => o.OrderCode, o => o.OrderId, StringComparer.OrdinalIgnoreCase);
@@ -141,7 +154,7 @@ public class OrderMasterLoader : IOrderMasterLoader
             .ToListAsync());
 
         var toInsert = new List<OrderDetail>();
-        foreach (var csv in orderDetails)
+        foreach (var csv in listDetails)
         {
             if (csv.Quantity <= 0 || csv.TotalPrice < 0)
             {
