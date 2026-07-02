@@ -1,5 +1,19 @@
-﻿################################################################################
-# Este archivo .gitignore ha sido creado automáticamente por Microsoft(R) Visual Studio.
-################################################################################
+## Ignore Visual Studio temporary files and build outputs
+.vs/
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.slnx.sqlite
+slnx.sqlite
+CopilotIndices/
+FileContentIndex/
+v17/
+VSWorkspaceState.json
 
+## Keep the .agents folder (if you want to track project documentation)
+# If you want to ignore it, uncomment the line below:
+# /.agents
 /.agents
