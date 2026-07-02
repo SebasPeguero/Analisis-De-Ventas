@@ -7,17 +7,17 @@ using CsvHelper.Configuration;
 
 namespace AdoNet_EfCore.Extraction;
 
-/// <summary>
-/// Implementación genérica para la extracción de datos desde archivos CSV utilizando CsvHelper.
-/// </summary>
-/// <typeparam name="T">El tipo de DTO a retornar.</typeparam>
+
+
+
+
 public class CsvExtractor<T> : ICsvExtractor<T>
 {
-    /// <summary>
-    /// Extrae los registros del archivo CSV especificado de forma asíncrona.
-    /// </summary>
-    /// <param name="filePath">Ruta física del archivo CSV.</param>
-    /// <returns>Colección de objetos mapeados.</returns>
+    
+    
+    
+    
+    
     public async Task<IEnumerable<T>> ExtractAsync(string filePath)
     {
         var config = new CsvConfiguration(CultureInfo.InvariantCulture)
